@@ -1,6 +1,6 @@
 ---
 - name: Create Azure VM
-  hosts: all
+  hosts: localhost
   gather_facts: no
   
   vars:
