@@ -1,7 +1,7 @@
 ---
 - name: Create Azure VM
   hosts: localhost
-  gather_facts: no
+  connection: local
   
   vars:
     resource_group: "Az-Lab-06-RG-ATOM" # Input
