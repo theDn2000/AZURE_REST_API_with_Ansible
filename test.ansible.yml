@@ -1,26 +1,26 @@
 ---
 - name: Create Azure VM
-  hosts: all
+  hosts: localhost
   connection: local
   tasks:
   - name: Create resource group # Not necessary for my test (Az-Lab-06-RG-ATOM)
     azure_rm_resourcegroup:
-      name: myResourceGroup
+      name: testResourceGroup
       location: centralindia
   - name: Create virtual network  # Not necessary for my test (10.1.0.0/16)
     azure_rm_virtualnetwork:
-      resource_group: myResourceGroup
+      resource_group: testResourceGroup
       name: myVnet
       address_prefixes: "10.0.0.0/16"
   - name: Add subnet # Not necessary for my test
     azure_rm_subnet:
-      resource_group: myResourceGroup 
+      resource_group: testResourceGroup 
       name: mySubnet
       address_prefix: "10.0.1.0/24"
       virtual_network: myVnet
   - name: Create public IP address 
     azure_rm_publicipaddress:
-      resource_group: myResourceGroup
+      resource_group: testResourceGroup
       allocation_method: Static
       name: myPublicIP
     register: output_ip_address
@@ -29,7 +29,7 @@
       msg: "The public IP is {{ output_ip_address.state.ip_address }}."
   - name: Create Network Security Group that allows SSH
     azure_rm_securitygroup:
-      resource_group: myResourceGroup
+      resource_group: testResourceGroup
       name: myNetworkSecurityGroup
       rules:
         - name: SSH
@@ -40,7 +40,7 @@
           direction: Inbound
   - name: Create virtual network interface card
     azure_rm_networkinterface:
-      resource_group: myResourceGroup
+      resource_group: testResourceGroup
       name: myNIC
       virtual_network: myVnet
       subnet: mySubnet
@@ -48,7 +48,7 @@
       security_group: myNetworkSecurityGroup
   - name: Create VM
     azure_rm_virtualmachine:
-      resource_group: myResourceGroup
+      resource_group: testResourceGroup
       name: myVM
       vm_size: Standard_DS1_v2
       admin_username: azureuser
