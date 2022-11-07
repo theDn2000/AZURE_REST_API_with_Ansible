@@ -1,3 +1,4 @@
----
-- hosts: localhost
-  vars
+- name: Create resource group
+  azure_rm_resourcegroup:
+    name: testResourceGroup
+    location: centralindia
