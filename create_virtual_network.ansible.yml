@@ -1,0 +1,14 @@
+---
+- name: Create Azure VM
+  hosts: localhost
+  connection: local
+  tasks:
+  - name: Create resource group # Create resource group
+    azure_rm_resourcegroup:
+      name: testResourceGroup
+      location: centralindia
+  - name: Create virtual network  # Create virtual network
+    azure_rm_virtualnetwork:
+      resource_group: testResourceGroup
+      name: myVnet
+      address_prefixes: "10.1.0.0/16"
