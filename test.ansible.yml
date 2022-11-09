@@ -50,6 +50,7 @@
     shell: ssh-keygen -t rsa -b 2048 -f ~/.ssh/id_rsa -q -N ""
     args:
       creates: ~/.ssh/id_rsa.pub
+    shell: cat ~/.ssh/id_rsa.pub
     register: ssh_key_data
   - name: Print version
     debug:
