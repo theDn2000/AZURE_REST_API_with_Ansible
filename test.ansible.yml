@@ -60,6 +60,7 @@
       ssh_password_enabled: false
       ssh_public_keys:
         - path: /home/azureuser/.ssh/authorized_keys
+          msg: "our fruit is {{ ssh_key_data.stdout }}"
           key_data: "{{ ssh_key_data.stdout }}"
       network_interfaces: myNIC
       image:
