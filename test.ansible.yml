@@ -46,10 +46,11 @@
       subnet: mySubnet
       public_ip_name: myPublicIP
       security_group: myNetworkSecurityGroup
-  - name: Create SSH key_data
-    shell: ssh-keygen -t rsa -b 2048 -f sshkey -q -N ""
+  - name: Create SSH key_data # Save the public ket in a variable
+    shell: ssh-keygen -t rsa -b 2048 -f ~/.ssh/id_rsa -q -N ""
     args:
-      creates: sshkey
+      creates: ~/.ssh/id_rsa.pub
+    register: ssh_key_data
   - name: Create VM
     azure_rm_virtualmachine:
       resource_group: testResourceGroup
@@ -59,10 +60,10 @@
       ssh_password_enabled: false
       ssh_public_keys:
         - path: /home/azureuser/.ssh/authorized_keys
-          key_data: "sshkey"
+          key_data: {{ssh_key_data}}
       network_interfaces: myNIC
       image:
-        offer: WindowsServer
-        publisher: MicrosoftWindowsServer
-        sku: '2016-Datacenter'
+        offer: CentOS
+        publisher: OpenLogic
+        sku: '7.5'
         version: latest
