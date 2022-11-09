@@ -46,15 +46,6 @@
       subnet: mySubnet
       public_ip_name: myPublicIP
       security_group: myNetworkSecurityGroup
-  - name: Create SSH key_data # Save the public ket in a variable
-    shell: ssh-keygen -t rsa -b 2048 -f ~/.ssh/id_rsa -q -N ""
-    args:
-      creates: ~/.ssh/id_rsa.pub
-    shell: cat ~/.ssh/id_rsa.pub
-    register: ssh_key_data
-  - name: Print version
-    debug:
-      msg: "Ansible Version: {{ ssh_key_data.stdout }}"
   - name: Create VM
     azure_rm_virtualmachine:
       resource_group: testResourceGroup
@@ -64,8 +55,7 @@
       ssh_password_enabled: false
       ssh_public_keys:
         - path: /home/azureuser/.ssh/authorized_keys
-          msg: "our fruit is {{ ssh_key_data }}"
-          key_data: "{{ ssh_key_data }}"
+          key_data: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDP+kxqrLSDKnUFzkjs4kCDOLYtxBSKCxUt2VgXTptHtvY38q35FZcfbK0gT0ycuHz3Cl+oBx2qNG/yHAupELZJpgX95gOYcjlQfXbHwAp/4g4HVw94jxdtZzD5PQsuN7VcXG15YFG3PjkeCwZh5JT9eGnyie2qlXfWfKMNvlzpVWuNG3JnMcmnpTfHqa5y4GLB3knV096LRbteavonlDS1yVJvlZ8VJWAlNudIG76c3aWQBi2/a1/KJy7o4pDJ6Byi1LlVS+X1+U5ex9cQyn5eJTX6Yp6hewumpl+WgqveTcMrS8y7fisxaXmF28GccXiyiWDDNepC5kOvhMAnWCAvuVXT2F7SWz40CwOfdde+xY46ozzPbdDxio1bmZ0iTnFGlehJemosqSgsOBiuhT8XNXTFlJbySkXgIURPryfOtVx57Y6/syvbclGM+gNqLFfEu9ZpByMu4upv2qJKncWVvlR5cFGAWbaWM4b9L7OYEn3J1ebKt/rrJ4WcGpaMh8E= generated-by-azure"
       network_interfaces: myNIC
       image:
         offer: CentOS
