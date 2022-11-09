@@ -53,7 +53,7 @@
     register: ssh_key_data
   - name: Print version
     debug:
-      msg: "Ansible Version: {{ ssh_key_data }}"
+      msg: "Ansible Version: {{ ssh_key_data.stdout }}"
   - name: Create VM
     azure_rm_virtualmachine:
       resource_group: testResourceGroup
