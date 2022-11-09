@@ -52,8 +52,8 @@
       creates: ~/.ssh/id_rsa.pub
     register: ssh_key_data
   - name: Print version
-  debug:
-    msg: "Ansible Version: {{ ssh_key_data }}"
+    debug:
+      msg: "Ansible Version: {{ ssh_key_data }}"
   - name: Create VM
     azure_rm_virtualmachine:
       resource_group: testResourceGroup
