@@ -51,10 +51,8 @@
     args:
       creates: ~/.ssh/id_rsa.pub
     register: ssh_key_data
-  - name: debug message
-      ansible.builtin.debug:
-        msg: "our fruit is {{ ssh_key_data }}"
-        verbosity: 2
+  - name: Print mosh version
+  debug: "msg=The key is: '{{ ssh_key_data }}'"
   - name: Create VM
     azure_rm_virtualmachine:
       resource_group: testResourceGroup
