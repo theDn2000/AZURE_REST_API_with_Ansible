@@ -58,7 +58,7 @@
           key_data: "<key_data>"
       network_interfaces: myNIC
       image:
-        offer: WindowsServer
-        publisher: MicrosoftWindowsServer
-        sku: '2016-Datacenter'
+        offer: CentOS
+        publisher: OpenLogic
+        sku: '7.5'
         version: latest
