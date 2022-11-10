@@ -16,7 +16,7 @@
     azure_rm_subnet:
       resource_group: testResourceGroup 
       name: mySubnet
-      address_prefix: "10.1.0.0/24"
+      address_prefix: "10.0.1.0/24"
       virtual_network: myVnet
   - name: Create public IP address 
     azure_rm_publicipaddress:
