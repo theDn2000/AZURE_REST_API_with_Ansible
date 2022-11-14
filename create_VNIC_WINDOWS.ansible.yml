@@ -1,0 +1,67 @@
+---
+- name: Create Azure VM
+  hosts: localhost
+  connection: local
+  tasks:
+  - name: Create resource group # Create resource group
+    azure_rm_resourcegroup:
+      name: testResourceGroup
+      location: centralindia
+  - name: Create virtual network  # Create virtual network
+    azure_rm_virtualnetwork:
+      resource_group: testResourceGroup
+      name: myVnet
+      address_prefixes: "10.0.0.0/16"
+  - name: Add subnet # Add subnet
+    azure_rm_subnet:
+      resource_group: testResourceGroup 
+      name: mySubnet
+      address_prefix: "10.0.1.0/24"
+      virtual_network: myVnet
+  - name: Create public IP address # Create public IP address
+    azure_rm_publicipaddress:
+      resource_group: testResourceGroup
+      allocation_method: Static
+      name: myPublicIP
+    register: output_ip_address
+  - name: Public IP of VM 
+    debug:
+      msg: "The public IP is {{ output_ip_address.state.ip_address }}."
+  - name: Create Network Security Group that opens WinRM and HTTP ports # Create Network Security Group that opens WinRM and HTTP ports
+    azure_rm_securitygroup:
+      resource_group: testResourceGroup
+      name: myNetworkSecurityGroup
+      rules:
+        - name: 'allow_rdp'
+          protocol: Tcp
+          destination_port_range: 3389
+          access: Allow
+          priority: 1001
+          direction: Inbound
+        - name: 'allow_web_traffic'
+          protocol: Tcp
+          destination_port_range:
+            - 80
+            - 443
+          access: Allow
+          priority: 1002
+          direction: Inbound
+        - name: 'allow_powershell_remoting'
+          protocol: Tcp
+          destination_port_range:
+            - 5985
+            - 5986
+          access: Allow
+          priority: 1003
+          direction: Inbound
+  - name: Create virtual network interface card # Create virtual network interface card
+    azure_rm_networkinterface:
+      resource_group: testResourceGroup
+      name: myNIC
+      virtual_network: myVnet
+      subnet: mySubnet
+      security_group: myNetworkSecurityGroup
+      ip_configurations:
+        - name: default
+          public_ip_address_name: myPublicIP
+          primary: True
