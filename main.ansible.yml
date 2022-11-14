@@ -1,3 +1,6 @@
+# FILE WITH NO UTILITY (AT LEAST NOW)
+
+# DO NOT USE THIS FILE
 ---
 - name: Create Azure VM
   hosts: localhost
