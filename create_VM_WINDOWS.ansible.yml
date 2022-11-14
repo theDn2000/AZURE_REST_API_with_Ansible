@@ -84,7 +84,7 @@
           version: latest
     no_log: true
 
-  - name: Create VM script extension to enable HTTPS WinRM listener
+  - name: Create VM script extension to enable HTTPS WinRM listener #WinRM
     azure_rm_virtualmachineextension:
       name: winrm-extension
       resource_group: testResourceGroup
@@ -95,7 +95,7 @@
       settings: '{"fileUris": ["https://raw.githubusercontent.com/ansible/ansible/devel/examples/scripts/ConfigureRemotingForAnsible.ps1"],"commandToExecute": "powershell -ExecutionPolicy Unrestricted -File ConfigureRemotingForAnsible.ps1"}'
       auto_upgrade_minor_version: true
 
-  - name: Get facts for one Public IP
+  - name: Get facts for one Public IP # Find connection time in order to make the configuration
     azure_rm_publicipaddress_info:
       resource_group: testResourceGroup
       name: myPublicIP
