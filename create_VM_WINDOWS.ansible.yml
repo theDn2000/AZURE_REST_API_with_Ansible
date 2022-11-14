@@ -71,7 +71,7 @@
       name: win-vm
       vm_size: Standard_B2ms
       admin_username: azureuser
-      admin_password: "Atom12"
+      admin_password: "Flexxible123"
       network_interfaces: myNIC
       os_type: Windows
       image:
