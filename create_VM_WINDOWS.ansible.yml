@@ -2,9 +2,6 @@
 - name: Create Azure VM
   hosts: localhost
   connection: local
-  vars_prompt:
-    - name: password
-      prompt: "Enter local administrator password"
   tasks:
   - name: Create resource group # Create resource group
     azure_rm_resourcegroup:
@@ -74,7 +71,7 @@
       name: win-vm
       vm_size: Standard_B2ms
       admin_username: azureuser
-      admin_password: "{{ password }}"
+      admin_password: "Atom12"
       network_interfaces: myNIC
       os_type: Windows
       image:
