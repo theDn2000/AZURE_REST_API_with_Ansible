@@ -46,7 +46,7 @@
       subnet: mySubnet
       public_ip_name: myPublicIP
       security_group: myNetworkSecurityGroup
-  - name: Create SSH key_data # Save the content of the public key file in a variable (eight task)
+  - name: Create SSH key_data # Save the content of the public key file in a variable (eighth task)
     shell: ssh-keygen -t rsa -b 2048 -f ~/.ssh/id_rsa -q -N ""
     args:
       creates: ~/.ssh/id_rsa.pub
