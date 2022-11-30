@@ -1,0 +1,72 @@
+---
+- name: Create Azure VM
+  hosts: localhost
+  connection: local
+  tasks:
+  - name: Create resource group # First task
+    azure_rm_resourcegroup:
+      name: testResourceGroup
+      location: centralindia
+  - name: Create virtual network  # Second task
+    azure_rm_virtualnetwork:
+      resource_group: testResourceGroup
+      name: myVnet
+      address_prefixes: "10.0.0.0/16"
+  - name: Add subnet # Third task
+    azure_rm_subnet:
+      resource_group: testResourceGroup 
+      name: mySubnet
+      address_prefix: "10.0.1.0/24"
+      virtual_network: myVnet
+  - name: Create public IP address # Fourth task
+    azure_rm_publicipaddress:
+      resource_group: testResourceGroup
+      allocation_method: Static
+      name: myPublicIP
+    register: output_ip_address
+  - name: Public IP of VM  # Fifth task
+    debug:
+      msg: "The public IP is {{ output_ip_address.state.ip_address }}."
+  - name: Create Network Security Group that allows SSH # Sixth task
+    azure_rm_securitygroup:
+      resource_group: testResourceGroup
+      name: myNetworkSecurityGroup
+      rules:
+        - name: SSH
+          protocol: Tcp
+          destination_port_range: 22
+          access: Allow
+          priority: 1001
+          direction: Inbound
+  - name: Create virtual network interface card # Seventh task
+    azure_rm_networkinterface:
+      resource_group: testResourceGroup
+      name: myNIC
+      virtual_network: myVnet
+      subnet: mySubnet
+      public_ip_name: myPublicIP
+      security_group: myNetworkSecurityGroup
+  - name: Create SSH key_data # Save the content of the public key file in a variable (eight task)
+    shell: ssh-keygen -t rsa -b 2048 -f ~/.ssh/id_rsa -q -N ""
+    args:
+      creates: ~/.ssh/id_rsa.pub
+    register: ssh_key_data
+  - name: read the content of the public key file and store it # Ninth task
+    shell: cat ~/.ssh/id_rsa.pub
+    register: public_key
+  - name: Create VM # Tenth task
+    azure_rm_virtualmachine:
+      resource_group: testResourceGroup
+      name: myVM
+      vm_size: Standard_B2ms
+      admin_username: azureuser
+      ssh_password_enabled: false
+      ssh_public_keys:
+        - path: /home/azureuser/.ssh/authorized_keys
+          key_data: "{{ public_key.stdout }}"
+      network_interfaces: myNIC
+      image:
+        offer: rhel-byos
+        publisher: redhat
+        sku: 'rhel-lvm75'
+        version: latest
