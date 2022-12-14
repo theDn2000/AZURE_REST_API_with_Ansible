@@ -8,12 +8,12 @@ param(
 
     [Parameter()]
 
-    [string]$parameter2
+    [string]$parameter2,
     
     
     [Parameter()]
 
-    [string]$parameter3
+    [string]$parameter3,
     
     [Parameter()]
 
